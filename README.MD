@@ -1,28 +1,29 @@
 # NodeWave Backend Technical Assessment
 
-Author: Kevin Edgard Halim
-Position: Backend Engineer Candidate
+**Author**: Kevin Edgard Halim  
+**Position**: Backend Engineer Candidate
 
 ## Overview
-This repository contains a backend service built with Node.js, TypeScript, Express, and Prisma ORM for the NodeWave Backend Technical Assessment. The app showcases JWT-based authentication, asynchronous file processing jobs, a background worker, pagination, retry handling, structured logging, and a modular project layout.
+This repository implements the NodeWave Backend Engineer assessment requirement: a system that processes large Excel files **asynchronously** to avoid timeout and improve user experience. The backend immediately returns `IN PROGRESS` (status `PENDING`) upon upload, handles file parsing in the background (**not fire-and-forget**), and provides endpoints to list, inspect, and retry jobs.
 
 ## Tech Stack
-- Language: TypeScript
-- Framework: Express.js
-- ORM: Prisma
-- Database: MySQL
-- Authentication: JWT
-- Logging: Winston + Morgan
-- Dev tools: Nodemon, ts-node
+- **Language**: TypeScript  
+- **Framework**: Express.js  
+- **ORM**: Prisma  
+- **Database**: MySQL  
+- **Authentication**: JWT  
+- **Logging**: Winston + Morgan  
+- **Dev Tools**: Nodemon, ts-node, node-cron  
 
-## Features
-- JWT login and auth middleware (Bearer token)
-- File processing jobs with PENDING -> IN_PROGRESS -> SUCCESS flow (placeholder logic)
-- Retry only for FAILED jobs; attempts counter increments
-- Pagination for file job listing
-- Background worker using node-cron (runs every 5 seconds)
-- Consistent response shape: { "content": {}, "message": "Success", "errors": [] }
-- Module aliasing for clean imports
+## Implemented Features ✅
+- JWT-based authentication (`/auth/login`)  
+- File upload via URL (recommended by assessment) → immediate `PENDING` response  
+- Background worker (runs every 5s) processes jobs with status tracking  
+- Job lifecycle: `PENDING` → `IN_PROGRESS` → (`SUCCESS` | `FAILED`)  
+- Retry endpoint (`POST /files/:id/retry`) — only allowed for `FAILED` jobs (increments `attempts`)  
+- Paginated & filterable job listing (`GET /files?page=1&rows=10`)  
+- Consistent response format: `{ "content": {}, "message": "Success", "errors": [] }`  
+- Clean, modular architecture with separation of concerns  
 
 ## Project Structure
 be-test/
